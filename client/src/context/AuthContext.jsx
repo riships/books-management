@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -7,7 +8,7 @@ const AuthProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [token, setToken] = useState(null);
 
-    const login = async (firstName, password) => {
+    const login = async (email, password) => {
         try {
             const response = await fetch(import.meta.env.VITE_API_URL + '/user/login',
                 {
@@ -15,12 +16,15 @@ const AuthProvider = ({ children }) => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ firstName, password })
+                    body: JSON.stringify({ email, password })
                 }
             );
             const data = await response.json();
             setToken(data.token);
             sessionStorage.setItem('authToken', data.token);
+            if (data.success) {
+
+            }
             return true;
         }
         catch (error) {
@@ -31,21 +35,12 @@ const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await fetch(import.meta.env.VITE_API_URL + '/user/signout',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'yt-auth-token': token
-                    }
-                }
-            );
             setToken(null);
             sessionStorage.removeItem('authToken');
             return true;
         }
         catch (error) {
-            setError(error.response.data.error);
+            setError(error);
             return false;
         }
     }

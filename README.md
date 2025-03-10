@@ -2,8 +2,9 @@
 
 ## 1. Clone the Repository
 ```sh
-git clone https://github.com/riships/user_management_yt.git
-cd user_management_yt
+git clone https://github.com/riships/books-management.git
+cd books-management
+
 ```
 
 ## 2. Set Up Environment Variables
@@ -16,10 +17,8 @@ touch server/.env
 Add the following environment variables:
 ```sh
 # server/.env
-MONGO_URI=mongodb://localhost:27017/user_management
+MONGO_URI=mongodb://localhost:27017/library_management
 SECRET_KEY=RISHISACHINSABIR
-EMAIL_PASSWORD=app_password
-EMAIL_USERNAME=email-id-app-is-registered-with
 CLIENT_URL=http://localhost:5173
 ```
 

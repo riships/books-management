@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
+import { useNavigate, Link } from 'react-router-dom';
+
 function Signup() {
+    const navigate = useNavigate();
     // State to store form values
     const [formData, setFormData] = useState({
         firstName: '',
@@ -23,6 +26,8 @@ function Signup() {
 
     useEffect(() => {
         const token = sessionStorage.getItem('authToken');
+        console.log(token);
+
         if (token) {
             navigate('/books');
         }
@@ -46,8 +51,6 @@ function Signup() {
                 credentials: 'include'
             });
             const data = await response.json();
-            console.log(data);
-
             if (data.success) {
                 // clear the data of form
                 setFormData({
@@ -57,98 +60,138 @@ function Signup() {
                     phone_number: '',
                     password: ''
                 });
-                setLoading(false);
+                alert(data.message);
+                navigate('/login')
             } else {
                 alert(data.message)
-                setLoading(false);
             }
+            setLoading(false);
         } catch (error) {
-            alert(error.message)
+            alert(error.message);
+            setLoading(false);
+        } finally {
+            setLoading(false);
         }
 
     }
 
     return (
-        <>
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-6 offset-md-3">
-                        <div className="card">
-                            <div className="card-header">
-                                <h2>Signup</h2>
-                            </div>
-                            <div className="card-body">
-                                <form onSubmit={handleSubmit}>
-                                    <div className="form-group mb-3">
-                                        <label>First Name</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            name="firstName"
-                                            value={formData.firstName}
-                                            onChange={handleChange}
-                                            placeholder="Enter your First Name"
-                                        />
+        <div className="py-5 container">
+            <div className="justify-content-center row">
+                <div className="col-md-6">
+                    <div className="shadow-lg border-0 rounded-lg card">
+                        <div className="py-4 text-center card-header" style={{ background: 'linear-gradient(to right, #4e54c8, #8f94fb)' }}>
+                            <h2 className="mb-0 fw-bold text-white">Create Account</h2>
+                            <p className="mb-0 text-white-50">Join our community today</p>
+                        </div>
+                        <div className="p-4 p-md-5 card-body">
+                            <form onSubmit={handleSubmit}>
+                                <div className="row">
+                                    <div className="mb-3 col-md-6">
+                                        <div className="form-floating">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                name="firstName"
+                                                id="firstName"
+                                                value={formData.firstName}
+                                                onChange={handleChange}
+                                                placeholder="Enter your First Name"
+                                            />
+                                            <label htmlFor="firstName">First Name</label>
+                                        </div>
                                     </div>
-                                    <div className="form-group mb-3">
-                                        <label>Last Name</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            name="lastName"
-                                            value={formData.lastName}
-                                            onChange={handleChange}
-                                            placeholder="Enter your Last Name"
-                                        />
+                                    <div className="mb-3 col-md-6">
+                                        <div className="form-floating">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                name="lastName"
+                                                id="lastName"
+                                                value={formData.lastName}
+                                                onChange={handleChange}
+                                                placeholder="Enter your Last Name"
+                                            />
+                                            <label htmlFor="lastName">Last Name</label>
+                                        </div>
                                     </div>
-                                    <div className="form-group mb-3">
-                                        <label>Email</label>
-                                        <input
-                                            type="email"
-                                            className="form-control"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            placeholder="Enter your email"
-                                        />
-                                    </div>
-                                    <div className="form-group mb-3">
-                                        <label>Phone</label>
-                                        <input
-                                            type="tel"
-                                            className="form-control"
-                                            name="phone_number"
-                                            value={formData.phone_number}
-                                            onChange={handleChange}
-                                            placeholder="Enter your Phone"
-                                        />
-                                    </div>
-                                    <div className="form-group mb-3">
-                                        <label>Password</label>
-                                        <input
-                                            type="password"
-                                            className="form-control"
-                                            name="password"
-                                            value={formData.password}
-                                            onChange={handleChange}
-                                            placeholder="Enter your password"
-                                        />
-                                    </div>
-                                    <button type="submit" className="mb-3 w-100 btn btn-primary">
-                                        {
-                                            loading ? (
-                                                <Spinner animation="border" variant="light" />
-                                            ) : 'Signup'
+                                </div>
 
-                                        }
-                                    </button>
-                                </form>
-                            </div>
+                                <div className="form-floating mb-3">
+                                    <input
+                                        type="email"
+                                        className="form-control"
+                                        name="email"
+                                        id="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        placeholder="Enter your email"
+                                    />
+                                    <label htmlFor="email">Email address</label>
+                                </div>
+
+                                <div className="form-floating mb-3">
+                                    <input
+                                        type="tel"
+                                        className="form-control"
+                                        name="phone_number"
+                                        id="phone"
+                                        value={formData.phone_number}
+                                        onChange={handleChange}
+                                        placeholder="Enter your Phone"
+                                    />
+                                    <label htmlFor="phone">Phone Number</label>
+                                </div>
+
+                                <div className="form-floating mb-4">
+                                    <input
+                                        type="password"
+                                        className="form-control"
+                                        name="password"
+                                        id="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        placeholder="Enter your password"
+                                    />
+                                    <label htmlFor="password">Password</label>
+                                </div>
+
+                                <button 
+                                    type="submit" 
+                                    className="mb-3 py-3 rounded-3 fw-bold w-100 text-uppercase btn btn-primary"
+                                    style={{ 
+                                        background: 'linear-gradient(to right, #4e54c8, #8f94fb)',
+                                        border: 'none'
+                                    }}
+                                    disabled={loading}
+                                >
+                                    {loading ? (
+                                        <Spinner 
+                                            animation="border" 
+                                            size="sm" 
+                                            className="me-2"
+                                        />
+                                    ) : 'Sign Up'}
+                                </button>
+
+                                <div className="text-center">
+                                    <p className="mb-0 text-secondary">
+                                        Already have an account?{' '}
+                                        <Link 
+                                            to="/login" 
+                                            className="fw-bold text-decoration-none"
+                                            style={{ color: '#4e54c8' }}
+                                        >
+                                            Login here
+                                        </Link>
+                                    </p>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

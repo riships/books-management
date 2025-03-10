@@ -3,6 +3,8 @@ import Signup from './views/Signup';
 import Login from './views/Login';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import NotFound from './components/NotFound';
+import Books from './views/Books';
+import AddBook from './views/AddBook';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
 
         {/* Protected Routes */}
         <Route element={<ProtectedRoutes />}>
+          <Route path='books' element={<Books />} />
+          <Route path='addBook' element={<AddBook />} />
         </Route>
 
         {/* Catch-All 404 Page */}

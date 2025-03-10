@@ -19,7 +19,7 @@ dbconnection();
 app.use(cors({
     origin: process.env.CLIENT_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'yt-auth-token'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'library-auth-token'],
     credentials: true
 }));
 

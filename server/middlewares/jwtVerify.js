@@ -1,35 +1,52 @@
 import jwt from 'jsonwebtoken';
-import { ErrorHandler } from '../utils/errorHandler.js';
+import { ApiError } from './errorHandler.js';
 
 const secret = process.env.SECRET_KEY;
 
 const verifyJwt = (req, res, next) => {
-    const token = req.header('yt-auth-token');
-    // check if cookie is expired
+    const token = req.header('library-auth-token');
+
+    // check if token exists
     if (!token) {
-        return next(new ErrorHandler(401, 'Access denied. No token provided.'));
+        throw new ApiError(401, 'Access denied. No token provided.');
     }
 
     try {
         const decoded = jwt.verify(token, secret);
-        const isExpired = decoded.exp * 1000 < Date.now();
-        if (isExpired) {
-            res.cookies(
-                'token',
-                '',
-                {
-                    maxAge: -1,
-                    httpOnly: true,
-                    sameSite: 'strict',
-                }
-            )
-            return next(new ErrorHandler(401, 'Session expired. Please log in again.'));
+
+        // Check token expiration
+        if (decoded.exp && decoded.exp * 1000 < Date.now()) {
+            // Clear the expired cookie
+            res.clearCookie('token', {
+                httpOnly: true,
+                sameSite: 'strict'
+            });
+            throw new ApiError(401, 'Session expired. Please log in again.');
         }
+
         req.user = decoded;
         next();
     } catch (error) {
+        // Handle specific JWT errors
+        if (error.name === 'JsonWebTokenError') {
+            throw new ApiError(401, 'Invalid token format');
+        } else if (error.name === 'TokenExpiredError') {
+            // Clear the expired cookie
+            res.clearCookie('token', {
+                httpOnly: true,
+                sameSite: 'strict'
+            });
+            throw new ApiError(401, 'Token has expired');
+        }
+
+        // If it's already an ApiError, throw it as is
+        if (error instanceof ApiError) {
+            throw error;
+        }
+
+        // Handle any other unexpected errors
         console.error('JWT Verification Error:', error);
-        return next(new ErrorHandler(401, 'Invalid or expired token.'));
+        throw new ApiError(500, 'Internal server error during authentication');
     }
 };
 

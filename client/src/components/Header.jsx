@@ -1,8 +1,19 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
-import Signout from "./Signout";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Button } from "react-bootstrap";
 
 function Header() {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+    function handleLogout() {
+        const confirm = window.confirm("Are you sure you want to log out?");
+        if (confirm) {
+            logout();
+            navigate('/login')
+        }
+    }
+
     return (
         <header className="header">
             <div className="logo">
@@ -16,19 +27,19 @@ function Header() {
             <nav className="nav">
                 <ul className="mb-0">
                     <li>
-                        <NavLink to="/upload" className={({ isActive }) => (isActive ? "active" : "")}>
-                            Upload Data Page
+                        <NavLink to="/books" className={({ isActive }) => (isActive ? "active" : "")}>
+                            Books
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/videoListing" className={({ isActive }) => (isActive ? "active" : "")}>
-                            Videos List
+                        <NavLink to="/addBook" className={({ isActive }) => (isActive ? "active" : "")}>
+                            Add
                         </NavLink>
                     </li>
                 </ul>
-                <Signout />
+                <Button variant="outline-danger" onClick={handleLogout}>Logout</Button>
             </nav>
-            
+
         </header>
     );
 }
