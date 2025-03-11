@@ -10,4 +10,4 @@ router
     .get(verifyJwt, getAllBooks) // Get all books (authentication required)
     .post(verifyJwt, validateBook, addBook); // Validate & add a new book
 
-export default router;  //export the router to use it in other files
+export default router; //export the router to use it in other files

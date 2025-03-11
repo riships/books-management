@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -20,6 +19,9 @@ const AuthProvider = ({ children }) => {
                 }
             );
             const data = await response.json();
+            if (!data.token) {
+                return alert(data.message)
+            }
             setToken(data.token);
             sessionStorage.setItem('authToken', data.token);
             if (data.success) {

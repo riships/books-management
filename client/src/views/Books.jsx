@@ -12,8 +12,17 @@ function Books() {
     const fetchBooks = async () => {
         try {
             // Replace with your actual API endpoint
-            const response = await fetch('http://localhost:8000/api/books');
+            const response = await fetch(import.meta.env.VITE_API_URL + '/books',
+                {
+                    method: 'GET',
+                    headers: {
+                        'library-auth-token': sessionStorage.getItem('authToken')
+                    }
+                });
             const data = await response.json();
+            if (!data.success) {
+                return alert(data.message);
+            }
             setBooks(data);
             setLoading(false);
         } catch (error) {
