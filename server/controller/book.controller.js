@@ -1,12 +1,11 @@
 import { ApiError } from '../middlewares/errorHandler.js';
 import Book from "../model/book.model.js";
 
-export const getAllBooks = async (req, res, next) => {
+export const getAllBooks = async(req, res, next) => {
     try {
         const books = await Book.find();
-        if (books.length === 0) {
-            throw new ApiError(404, 'No books found');
-        }
+        console.log(books);
+
         res.status(200).json({
             success: true,
             data: books
@@ -16,10 +15,10 @@ export const getAllBooks = async (req, res, next) => {
     }
 };
 
-export const addBook = async (req, res, next) => {
+export const addBook = async(req, res, next) => {
     try {
         console.log(req.body);
-        
+
         if (!req.body || Object.keys(req.body).length === 0) {
             throw new ApiError(400, 'Book data is required');
         }
