@@ -3,7 +3,8 @@ import { Outlet, Navigate } from 'react-router-dom';
 import Header from './Header';
 
 function ProtectedRoutes() {
-    if (!sessionStorage.getItem('authToken')) {
+    let token = sessionStorage.getItem('authToken');
+    if (token === null || token === '' || token === 'undefined') {
         return <Navigate to="/login" />
     }
     return (
