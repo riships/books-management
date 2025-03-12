@@ -29,7 +29,6 @@ MONGO_URI=mongodb://localhost:27017/books_management
 SECRET_KEY=RISHISACHINSABIR
 CLIENT_URL=http://localhost:5173
 PORT=5000
-NODE_ENV=development
 ```
 
 ### For Client
@@ -77,31 +76,3 @@ npm run dev
 The application should now be running at:
 - Frontend: http://localhost:5173
 - Backend: http://localhost:5000
-
-## 5. Testing
-
-Run backend tests:
-```sh
-cd server
-npm test
-```
-
-Run frontend tests:
-```sh
-cd client
-npm test
-```
-
-## Project Structure
-
-```
-books-management/
-├── client/                 # Frontend React application
-│   ├── src/
-│   ├── public/
-│   └── package.json
-└── server/                 # Backend Node.js application
-    ├── src/
-    ├── tests/
-    └── package.json
-```
